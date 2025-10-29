@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full"> <!-- 設定語言為繁體中文 -->
+<html lang="en" class="h-full">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,6 +23,24 @@
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
+    /* 表格樣式調整 */
+    .results-table th, .results-table td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #374151; /* gray-700 */
+      text-align: left;
+      vertical-align: top;
+    }
+    .results-table th {
+      background-color: #1F2937; /* gray-800 */
+      font-weight: 600;
+      color: #D1D5DB; /* gray-300 */
+    }
+    .results-table tr:last-child td {
+      border-bottom: none;
+    }
+    .results-table tr:hover td {
+      background-color: #374151; /* gray-700 */
+    }
   </style>
   <!-- 載入 Inter 字體 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,7 +49,7 @@
 </head>
 <body class="bg-gray-900 text-gray-100 h-full antialiased">
 
-  <div class="container mx-auto p-4 md:p-8 max-w-4xl">
+  <div class="container mx-auto p-4 md:p-8 max-w-7xl"> <!-- 增加最大寬度以容納表格 -->
     <header class="mb-8">
       <h1 class="text-4xl font-bold text-center text-white">Neuroscience API Explorer</h1>
       <p class="text-center text-gray-400 mt-2">
@@ -40,9 +58,11 @@
       </p>
     </header>
 
-    <div class="space-y-8">
+    <!-- 更新此 div 以使用 flexbox -->
+    <div class="space-y-8 md:space-y-0 md:flex md:space-x-8 md:items-start">
       <!-- 區塊 1: 獲取所有詞彙 -->
-      <section class="bg-gray-800 shadow-xl rounded-lg p-6">
+      <!-- 更新 section class, 增加 md:w-1/3 -->
+      <section class="bg-gray-800 shadow-xl rounded-lg p-6 md:w-1/3 flex flex-col">
         <h2 class="text-2xl font-semibold mb-4 text-white">1. Get All Terms</h2>
         <p class="text-gray-400 mb-4">Fetch all available terms from the <code class="bg-gray-700 text-sm p-1 rounded-md">/terms</code> endpoint.</p>
         <button id="btn-all-terms" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-md transition-colors duration-200 flex items-center justify-center space-x-2">
@@ -56,7 +76,8 @@
       </section>
 
       <!-- 區塊 2: 獲取相關詞彙 -->
-      <section class="bg-gray-800 shadow-xl rounded-lg p-6">
+      <!-- 更新 section class, 增加 md:w-1/3 -->
+      <section class="bg-gray-800 shadow-xl rounded-lg p-6 md:w-1/3 flex flex-col">
         <h2 class="text-2xl font-semibold mb-4 text-white">2. Get Associated Terms</h2>
         <p class="text-gray-400 mb-4">Query for terms associated with a specific term from <code class="bg-gray-700 text-sm p-1 rounded-md">/terms/&lt;term&gt;</code>.</p>
         <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
@@ -72,7 +93,8 @@
       </section>
 
       <!-- 區塊 3: 查詢研究 -->
-      <section class="bg-gray-800 shadow-xl rounded-lg p-6">
+      <!-- 更新 section class, 增加 md:w-1/3 -->
+      <section class="bg-gray-800 shadow-xl rounded-lg p-6 md:w-1/3 flex flex-col">
         <h2 class="text-2xl font-semibold mb-4 text-white">3. Query Studies</h2>
         <p class="text-gray-400 mb-4">Perform a logical search from <code class="bg-gray-700 text-sm p-1 rounded-md">/query/&lt;query_string&gt;/studies</code>.</p>
         <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
@@ -145,10 +167,79 @@
      * @param {object} data - 要顯示的 JSON 資料
      */
     function showResult(outEl, data) {
-      // 檢查資料是否為陣列
-      if (Array.isArray(data)) {
-        // 如果是陣列，建立一個項目符號列表 (<ul>)
-        const listItems = data.map(item => 
+      let listData = null;
+
+      // 檢查 data.terms (用於 "Get All Terms")
+      if (data && Array.isArray(data.terms)) {
+        listData = data.terms;
+      } 
+      // 檢查 data.related (用於 "Get Associated Terms")
+      else if (data && Array.isArray(data.related)) {
+        // 從物件陣列中只提取 "term"
+        listData = data.related.map(item => item.term);
+      }
+      // 檢查 data.results (用於 "Query Studies")
+      else if (data && Array.isArray(data.results)) {
+        
+        // 如果陣列是空的
+        if (data.results.length === 0) {
+          outEl.innerHTML = `<p class="text-gray-400 p-4 text-center">No results found.</p>`;
+          outEl.classList.remove('hidden');
+          return;
+        }
+
+        // 建立表格標頭
+        const headers = `
+          <thead>
+            <tr>
+              <th style="width: 10%;">Year</th>
+              <th style="width: 25%;">Journal</th>
+              <th style="width: 35%;">Title</th>
+              <th style="width: 30%;">Authors</th>
+            </tr>
+          </thead>`;
+
+        // 建立表格內容
+        const rows = data.results.map(item => `
+          <tr>
+            <td class="text-gray-400">${item.year || ''}</td>
+            <td class="text-gray-300">${item.journal || ''}</td>
+            <td class="text-gray-300">${item.title || ''}</td>
+            <td class="text-gray-400 text-sm">${item.authors || ''}</td>
+          </tr>
+        `).join('');
+
+        // 組合完整的表格
+        outEl.innerHTML = `
+          <div class="bg-gray-950 rounded-lg overflow-x-auto shadow-md">
+            <table class="w-full results-table text-sm">
+              ${headers}
+              <tbody>
+                ${rows}
+              </tbody>
+            </table>
+          </div>
+          <p class="text-sm text-gray-500 mt-2">Showing ${data.results.length} of ${data.count || data.results.length} results.</p>
+        `;
+        outEl.classList.remove('hidden');
+        return; // 表格建立完成，提前返回
+      }
+      // 否則，檢查 data 本身是否就是一個陣列 (備用)
+      else if (Array.isArray(data)) {
+        listData = data;
+      }
+
+      // --- 列表顯示邏輯 (用於 Terms 和 Related) ---
+      if (listData) {
+        // 如果陣列是空的
+        if (listData.length === 0) {
+          outEl.innerHTML = `<p class="text-gray-400 p-4 text-center">No items found.</p>`;
+          outEl.classList.remove('hidden');
+          return;
+        }
+
+        // 建立一個項目符號列表 (<ul>)
+        const listItems = listData.map(item => 
           `<li class="py-2 px-4 border-b border-gray-700 last:border-b-0 text-gray-300 hover:bg-gray-800 transition-colors duration-150">${item}</li>`
         ).join('');
         
@@ -157,7 +248,7 @@
             ${listItems}
           </ul>`;
       } else {
-        // 如果不是陣列，照常顯示 JSON
+        // --- JSON 顯示邏輯 (用於其他所有情況) ---
         const content = JSON.stringify(data, null, 2);
         outEl.innerHTML = `
           <pre class="bg-gray-950 text-green-300 p-4 rounded-md overflow-x-auto max-h-96 text-sm">${content}</pre>`;
