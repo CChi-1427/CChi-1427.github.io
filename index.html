@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full">
+<html lang="en" class="h-full"> <!-- 設定語言為繁體中文 -->
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Neuro API Frontend</title>
-  <!-- Load Tailwind CSS from CDN -->
+  <!-- 從 CDN 載入 Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Use the Inter font family */
+    /* 使用 Inter 字體 */
     body {
       font-family: 'Inter', sans-serif;
     }
-    /* Simple loading spinner */
+    /* 簡易載入動畫 */
     .spinner {
       border: 4px solid rgba(255, 255, 255, 0.3);
       border-radius: 50%;
@@ -24,7 +24,7 @@
       to { transform: rotate(360deg); }
     }
   </style>
-  <!-- Load Inter font -->
+  <!-- 載入 Inter 字體 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -35,15 +35,16 @@
     <header class="mb-8">
       <h1 class="text-4xl font-bold text-center text-white">Neuroscience API Explorer</h1>
       <p class="text-center text-gray-400 mt-2">
-        Frontend for <code class="bg-gray-700 text-sm p-1 rounded-md">https://mil.psy.ntu.edu.tw:5000</code>
+        <!-- 更新為 hpc 網址 -->
+        Frontend for <code class="bg-gray-700 text-sm p-1 rounded-md">https://hpc.psy.ntu.edu.tw:5000</code>
       </p>
     </header>
 
     <div class="space-y-8">
-      <!-- Section 1: Get All Terms -->
+      <!-- 區塊 1: 獲取所有詞彙 -->
       <section class="bg-gray-800 shadow-xl rounded-lg p-6">
         <h2 class="text-2xl font-semibold mb-4 text-white">1. Get All Terms</h2>
-        <p class="text-gray-400 mb-4">Fetches all available terms from the <code class="bg-gray-700 text-sm p-1 rounded-md">/terms</code> endpoint.</p>
+        <p class="text-gray-400 mb-4">Fetch all available terms from the <code class="bg-gray-700 text-sm p-1 rounded-md">/terms</code> endpoint.</p>
         <button id="btn-all-terms" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-md transition-colors duration-200 flex items-center justify-center space-x-2">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 5h10v10H5V5z" />
@@ -54,12 +55,12 @@
         <div id="out-all-terms" class="mt-4 hidden"></div>
       </section>
 
-      <!-- Section 2: Get Associated Terms -->
+      <!-- 區塊 2: 獲取相關詞彙 -->
       <section class="bg-gray-800 shadow-xl rounded-lg p-6">
         <h2 class="text-2xl font-semibold mb-4 text-white">2. Get Associated Terms</h2>
-        <p class="text-gray-400 mb-4">Looks up terms associated with a specific term from <code class="bg-gray-700 text-sm p-1 rounded-md">/terms/&lt;term&gt;</code>.</p>
+        <p class="text-gray-400 mb-4">Query for terms associated with a specific term from <code class="bg-gray-700 text-sm p-1 rounded-md">/terms/&lt;term&gt;</code>.</p>
         <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-          <input type="text" id="input-term" placeholder="e.g., amygdala" class="flex-grow w-full bg-gray-700 text-white border border-gray-600 rounded-md py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <input type="text" id="input-term" placeholder="e.g. amygdala" class="flex-grow w-full bg-gray-700 text-white border border-gray-600 rounded-md py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
           <button id="btn-assoc-terms" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-5 rounded-md transition-colors duration-200 flex items-center justify-center space-x-2">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
@@ -70,12 +71,12 @@
         <div id="out-assoc-terms" class="mt-4 hidden"></div>
       </section>
 
-      <!-- Section 3: Query Studies -->
+      <!-- 區塊 3: 查詢研究 -->
       <section class="bg-gray-800 shadow-xl rounded-lg p-6">
         <h2 class="text-2xl font-semibold mb-4 text-white">3. Query Studies</h2>
-        <p class="text-gray-400 mb-4">Performs a logical search from <code class="bg-gray-700 text-sm p-1 rounded-md">/query/&lt;query_string&gt;/studies</code>.</p>
+        <p class="text-gray-400 mb-4">Perform a logical search from <code class="bg-gray-700 text-sm p-1 rounded-md">/query/&lt;query_string&gt;/studies</code>.</p>
         <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-          <input type="text" id="input-query" placeholder="e.g., amygdala not emotion" class="flex-grow w-full bg-gray-700 text-white border border-gray-600 rounded-md py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <input type="text" id="input-query" placeholder="e.g. amygdala not emotion" class="flex-grow w-full bg-gray-700 text-white border border-gray-600 rounded-md py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
           <button id="btn-query" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-5 rounded-md transition-colors duration-200 flex items-center justify-center space-x-2">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
               <path d="M9 9a2 2 0 114 0 2 2 0 01-4 0z" />
@@ -94,10 +95,10 @@
   </div>
 
   <script>
-    // Base URL for the API
-    const API_BASE_URL = 'https://mil.psy.ntu.edu.tw:5000';
+    // API 的基礎網址 (更新為 hpc)
+    const API_BASE_URL = 'https://hpc.psy.ntu.edu.tw:5000';
 
-    // Get element references
+    // 獲取 DOM 元素參照
     const btnAllTerms = document.getElementById('btn-all-terms');
     const outAllTerms = document.getElementById('out-all-terms');
 
@@ -109,11 +110,11 @@
     const inputQuery = document.getElementById('input-query');
     const outQuery = document.getElementById('out-query');
 
-    // --- Helper Functions ---
+    // --- 輔助函式 ---
 
     /**
-     * Shows a loading message in the specified output element
-     * @param {HTMLElement} outEl - The output element
+     * 在指定的輸出元素中顯示載入訊息
+     * @param {HTMLElement} outEl - 輸出元素
      */
     function showLoading(outEl) {
       outEl.innerHTML = `
@@ -125,9 +126,9 @@
     }
 
     /**
-     * Shows an error message in the specified output element
-     * @param {HTMLElement} outEl - The output element
-     * @param {string} errorMsg - The error message to display
+     * 在指定的輸出元素中顯示錯誤訊息
+     * @param {HTMLElement} outEl - 輸出元素
+     * @param {string} errorMsg - 要顯示的錯誤訊息
      */
     function showError(outEl, errorMsg) {
       outEl.innerHTML = `
@@ -139,33 +140,40 @@
     }
 
     /**
-     * Shows the JSON result in a pretty-printed <pre> tag
-     * @param {HTMLElement} outEl - The output element
-     * @param {object} data - The JSON data to display
+     * 在 <pre> 標籤中以美觀格式顯示 JSON 結果
+     * @param {HTMLElement} outEl - 輸出元素
+     * @param {object} data - 要顯示的 JSON 資料
      */
     function showResult(outEl, data) {
-      // Check if data is an array and join with newlines for a cleaner list
-      let content;
+      // 檢查資料是否為陣列
       if (Array.isArray(data)) {
-        content = data.join('\n');
+        // 如果是陣列，建立一個項目符號列表 (<ul>)
+        const listItems = data.map(item => 
+          `<li class="py-2 px-4 border-b border-gray-700 last:border-b-0 text-gray-300 hover:bg-gray-800 transition-colors duration-150">${item}</li>`
+        ).join('');
+        
+        outEl.innerHTML = `
+          <ul class="bg-gray-950 rounded-md overflow-hidden max-h-96 overflow-y-auto text-sm list-none">
+            ${listItems}
+          </ul>`;
       } else {
-        content = JSON.stringify(data, null, 2);
+        // 如果不是陣列，照常顯示 JSON
+        const content = JSON.stringify(data, null, 2);
+        outEl.innerHTML = `
+          <pre class="bg-gray-950 text-green-300 p-4 rounded-md overflow-x-auto max-h-96 text-sm">${content}</pre>`;
       }
-      
-      outEl.innerHTML = `
-        <pre class="bg-gray-950 text-green-300 p-4 rounded-md overflow-x-auto max-h-96 text-sm">${content}</pre>`;
       outEl.classList.remove('hidden');
     }
 
     /**
-     * Generic fetch handler
-     * @param {string} url - The URL to fetch
-     * @param {HTMLElement} outEl - The output element to update
+     * 通用的 fetch 處理函式
+     * @param {string} url - 要 fetch 的網址
+     * @param {HTMLElement} outEl - 要更新的輸出元素
      */
     async function handleFetch(url, outEl) {
       showLoading(outEl);
       try {
-        // Note: Using 'cors' mode. The server MUST support this.
+        // 注意：使用 'cors' 模式。伺服器必須支援此設定。
         const resp = await fetch(url, { mode: 'cors' });
 
         if (!resp.ok) {
@@ -179,7 +187,7 @@
           showResult(outEl, data);
         } else {
           const text = await resp.text();
-          showResult(outEl, { response: text }); // Wrap non-json text in an object for consistent display
+          showResult(outEl, { response: text }); // 將非 JSON 文字包裝在物件中以便一致顯示
         }
       } catch (err) {
         let errorMsg = err.message;
@@ -187,36 +195,36 @@
             errorMsg = 'Network error or CORS issue. Check browser console (F12) for details. The server must send `Access-Control-Allow-Origin: *` header.';
         }
         showError(outEl, errorMsg);
-        console.error('Fetch error:', err);
+        console.error('Fetch Error:', err);
       }
     }
 
-    // --- Event Listeners ---
+    // --- 事件監聽器 ---
 
-    // 1. All Terms
+    // 1. 所有詞彙
     btnAllTerms.addEventListener('click', () => {
       handleFetch(`${API_BASE_URL}/terms`, outAllTerms);
     });
 
-    // 2. Associated Terms
+    // 2. 相關詞彙
     btnAssocTerms.addEventListener('click', () => {
       const term = inputTerm.value.trim();
       if (!term) {
         showError(outAssocTerms, 'Please enter a term.');
         return;
       }
-      // No encoding needed for this part of the path, but good practice to check
+      // 路徑的這個部分不需要編碼，但瀏覽器通常會自動處理
       handleFetch(`${API_BASE_URL}/terms/${term}`, outAssocTerms);
     });
 
-    // 3. Query Studies
+    // 3. 查詢研究
     btnQuery.addEventListener('click', () => {
       const query = inputQuery.value.trim();
       if (!query) {
         showError(outQuery, 'Please enter a query string.');
         return;
       }
-      // IMPORTANT: Encode the query string to be URL-safe
+      // 重要：將查詢字串編碼以確保 URL 安全
       const encodedQuery = encodeURIComponent(query);
       handleFetch(`${API_BASE_URL}/query/${encodedQuery}/studies`, outQuery);
     });
@@ -224,4 +232,3 @@
   </script>
 </body>
 </html>
-
